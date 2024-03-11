@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="post" class="buttons">
+  <h3>Enter The Chat Room</h3>
+  <div class="list-box">
+    <h3>List-box</h3>
+    {% for room in available_rooms %}
+    <div class="person">
+      <button class="btn-list" name="btn-list" value="{{ room }}">
+        {{ room }}
+      </button>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="head-elm">
+    <label>Name:</label>
+    <input
+      type="text"
+      placeholder="Pick a name!"
+      name="name"
+      value="{{ name }}"
+      class="name-room"
+    />
+    <button type="submit" name="create" class="create-btn">Create a Room</button>
+  </div>
+
+  <div class="join">
+    <label>Code:</label>
+    <input type="text" class="code-room" placeholder="Room Code" name="code" value="{{ code }}" />
+    <button type="submit" name="join" class="btn-join">Join a Room</button>
+  </div>
+
+<!--  <div class="max_people">-->
+<!--    <label>Enter room's max users:</label>-->
+<!--    <input type="text" class="field_max_people" placeholder="Number of users" name="max_people" value="{{ max_people }}">-->
+<!--  </div>-->
+
+  <div class="text-container">
+    <p class="moving-text">Artem's Chatik</p>
+  </div>
+
+  <div class="pyro" id="fireworkContainer">
+    <div class="before"></div>
+    <div class="after"></div>
+  </div>
+
+  <button class="firework-btn" id="fireworkButton">
+    Don't press Sigma😎
+  </button>
+
+  {% if error %}
+  <ul>
+    <li>{{ error }}</li>
+  </ul>
+  {% endif %}
+
+  {% if Joe %}
+  <ul class="Joe">
+    <li>{{ Joe }}</li>
+  </ul>
+  {% endif %}
+</form>
+
+<div id="loadingAnimation" class="loading-animation"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script>
+  function openWindow() {
+    var text = "I'm Joe Goldberg and i'll find u";
+
+    alert(text);
+  }
+  // function for exploding text
+  document.querySelector('.text-container').addEventListener('click', function() {
+    this.classList.add('exploding');
+  });
+
+  // This is for taking a password from list-box to input field
+  var socket = io();
+
+  // function for putting password inside field where class is code-room
+  function joinRoom(roomCode) {
+    document.querySelector('.code-room').value = roomCode;
+  }
+
+  // function to take all datas from buttons with class btn-list
+  document.querySelectorAll('.btn-list').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var roomCode = this.value;
+      joinRoom(roomCode);
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get reference to the button
+    const fireworkButton = document.getElementById('fireworkButton');
+    const loadingAnimation = document.getElementById('loadingAnimation');
+
+    // Add click event listener to the button
+    fireworkButton.addEventListener('click', function() {
+      // Show loading animation
+      loadingAnimation.style.display = 'block';
+
+      // Simulate a delay for demonstration purposes
+      setTimeout(function() {
+        // Hide loading animation
+        loadingAnimation.style.display = 'none';
+      }, 2000); // 2000 milliseconds (2 seconds) delay before hiding
+
+      // Call the alert function outside of setTimeout
+      openWindow();
+    });
+  });
+
+</script>
+{% endblock %}
