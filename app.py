@@ -32,16 +32,16 @@ def home():
         create = request.form.get("create", False)
 
         if code == 'Joe Goldberg is Artem Podorvan':
-            return render_template("home.html", Joe="He is spying on u while u're using this site", code='Hello u', name='I\'m behind u')
+            return render_template("index.html", Joe="He is spying on u while u're using this site", code='Hello u', name='I\'m behind u')
 
         # if name == 'I\'m behind u':
         #     return redirect(url_for("room", Joe_picture=True))  # Changed to redirect with Joe_picture=True
 
         if not name:
-            return render_template("home.html", error="Please enter a name.", code=code, name=name)
+            return render_template("index.html", error="Please enter a name.", code=code, name=name)
 
         if join != False and not code:
-            return render_template("home.html", error="Please enter a room code.", code=code, name=name)
+            return render_template("index.html", error="Please enter a room code.", code=code, name=name)
 
 
 
@@ -50,23 +50,23 @@ def home():
             room = generate_unique_code(4)
             rooms[room] = {"members": 0, "messages": []}
         elif code not in rooms:
-            return render_template("home.html", error="Room does not exist.", code=code, name=name)
+            return render_template("index.html", error="Room does not exist.", code=code, name=name)
 
         session["room"] = room
         session["name"] = name
         return redirect(url_for("room"))
 
-    return render_template("home.html", available_rooms=available_rooms)
+    return render_template("index.html", available_rooms=available_rooms)
 
 
 @app.route("/room")
 def room():
     room = session.get("room")
     if is_room_full(room):
-        return render_template("home.html", error="This room is full man!")
+        return render_template("index.html", error="This room is full man!")
 
     if room is None or session.get("name") is None or room not in rooms:
-        return redirect(url_for("home"))
+        return redirect(url_for("index"))
 
     return render_template("room.html", code=room, messages=rooms[room]["messages"])
 
